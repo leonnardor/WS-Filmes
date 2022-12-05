@@ -42,7 +42,7 @@ class TelefonePessoaController extends Controller
                   ];
                   
                 } else {
-                  return response()->json(['message' => 'Nenhuma pessoa cadastrada'], 404);
+                  return response()->json(['message' => 'Nenhum telefone encontrado.'], 404);
                 }
           } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 500);
@@ -89,15 +89,27 @@ class TelefonePessoaController extends Controller
     
     public function store(Request $request)
     {
-        // cadastrar telefone atrelado a pessoa pelo id da pessoa 
-                 try {
-            $pessoa = Pessoa::find($request->idPessoa);
-            $telefone = new TelefonePessoa();
-            $telefone->numeroTelefone = $request->numeroTelefone;
-            $telefone->operadoraTelefone = $request->operadoraTelefone;
-            $telefone->pessoa()->associate($pessoa); // associando o telefone a pessoa pelo id da pessoa 
-            $telefone->save();
-            return response()->json(['message' => 'Telefone cadastrado com sucesso!', 'Dados' => $telefone], 201);
+       try {
+            if ($request->has('numeroTelefone') && $request->has('idPessoa') && $request->has('operadoraTelefone')) {
+               $pessoa = Pessoa::find($request->idPessoa);
+                if ($pessoa) {
+                    $telefonePessoa = TelefonePessoa::create([
+                        'numeroTelefone' => $request->numeroTelefone,
+                        'idPessoa' => $request->idPessoa,
+                        'operadoraTelefone' => $request->operadoraTelefone,
+                    ]);
+                    return [
+                        'status' => 200,
+                        'message' => 'Telefone de pessoa cadastrado com sucesso!',
+                        'Dados' => new TelefonePessoaResource($telefonePessoa),
+                    ];
+                } else {
+                    return response()->json(['message' => 'Pessoa não encontrada.'], 404);
+                }
+            } else {
+                return response()->json(['message' => 'Preencha todos os campos.'], 404);
+
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -143,7 +155,6 @@ class TelefonePessoaController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-       
     }
 
     
@@ -192,17 +203,21 @@ class TelefonePessoaController extends Controller
      * )
      */
 
-   //update telefone de pessoa pelo id do telefone
+    // verificar se o telefone existe e se o id da pessoa existe e se o id do telefone é igual ao id da pessoa 
     public function update(Request $request, $id)
     {
         try {
             $telefone = TelefonePessoa::find($id);
             if ($telefone) {
-                $telefone->numeroTelefone = $request->numeroTelefone;
-                $telefone->operadoraTelefone = $request->operadoraTelefone;
-                $telefone->idPessoa = $request->idPessoa;
-                $telefone->save();
-                return response()->json(['message' => 'Telefone atualizado com sucesso!', 'Dados' => $telefone], 200);
+                if ($request->has('numeroTelefone') && $request->has('idPessoa') && $request->has('operadoraTelefone')) {
+                    $telefone->numeroTelefone = $request->numeroTelefone;
+                    $telefone->idPessoa = $request->idPessoa;
+                    $telefone->operadoraTelefone = $request->operadoraTelefone;
+                    $telefone->save();
+                    return response()->json(['message' => 'Telefone de pessoa atualizado com sucesso!', 'Dados' => $telefone], 200);
+                } else {
+                    return response()->json(['message' => 'Preencha todos os campos.'], 404);
+                }
             } else {
                 return response()->json(['message' => 'Telefone não encontrado'], 404);
             }
@@ -241,7 +256,6 @@ class TelefonePessoaController extends Controller
 
     public function destroy($id)
     {
-        // deletar telefone pelo id do telefone
         try {
             $telefone = TelefonePessoa::find($id);
             if ($telefone) {

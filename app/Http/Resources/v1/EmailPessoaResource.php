@@ -18,9 +18,9 @@ class EmailPessoaResource extends JsonResource
         return [
             'id' => $this->idEmail,
             'email' => $this->email,
-           
-            // return name of the person and relationship with the email
             'Usuario' => $this->pessoa->nomePessoa,
         ];
+
+        
     }
 }

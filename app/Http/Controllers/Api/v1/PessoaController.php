@@ -33,8 +33,20 @@ class PessoaController extends Controller
      */
     public function index()
     {
-        $pessoas = Pessoa::paginate(1);
-        return response()->json($pessoas);
+        try {
+            if (Pessoa::count() > 0) {
+                return [
+                    'status' => 200, 
+                    'message' => 'Dados encontrados com sucesso!',
+                    'Dados' => PessoaResource::collection(Pessoa::paginate(2)),
+                ];
+              
+            } else {
+              return response()->json(['message' => 'Nenhuma pessoa cadastrada'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
     
     
@@ -86,8 +98,26 @@ class PessoaController extends Controller
     public function store(Request $request)
     {
         try {
-            $pessoa = Pessoa::create($request->all());
-            return response()->json(['message' => 'Pessoa cadastrada com sucesso!', 'Dados' => $pessoa], 201);
+            if (empty($request->nomePessoa)) {
+                return response()->json(['message' => 'O campo nomePessoa é obrigatório'], 400);
+            }
+            if (empty($request->dataNascimento)) {
+                return response()->json(['message' => 'O campo dataNascimento é obrigatório'], 400);
+            }
+            if (empty($request->cpf)) {
+                return response()->json(['message' => 'O campo cpf é obrigatório'], 400);
+            }
+            if (empty($request->rg)) {
+                return response()->json(['message' => 'O campo rg é obrigatório'], 400);
+            }
+            
+            $pessoa = new Pessoa();
+            $pessoa->nomePessoa = $request->nomePessoa;
+            $pessoa->dataNascimento = $request->dataNascimento;
+            $pessoa->cpf = $request->cpf;
+            $pessoa->rg = $request->rg;
+            $pessoa->save();
+            return response()->json(['message' => 'Pessoa cadastrada com sucesso'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -190,11 +220,27 @@ class PessoaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // tente editar uma pessoa se ao menos um dos campos estiver preenchido e verificar se o email, cpf e rg já existem se sim, retorne uma mensagem de erro informando que o email, cpf e rg já existem
         try {
+            if (empty($request->nomePessoa) && empty($request->dataNascimento) && empty($request->cpf) && empty($request->rg)) {
+                return response()->json(['message' => 'Para atualizar uma pessoa é necessário preencher ao menos um dos campos (nomePessoa, dataNascimento, cpf, rg)'], 400);
+            }
             $pessoa = Pessoa::find($id);
             if ($pessoa) {
-                $pessoa->update($request->all());
-                return response()->json(['message' => 'Pessoa atualizada com sucesso!', 'Dados' => $pessoa], 200);
+                if (!empty($request->nomePessoa)) {
+                    $pessoa->nomePessoa = $request->nomePessoa;
+                }
+                if (!empty($request->dataNascimento)) {
+                    $pessoa->dataNascimento = $request->dataNascimento;
+                }
+                if (!empty($request->cpf)) {
+                    $pessoa->cpf = $request->cpf;
+                }
+                if (!empty($request->rg)) {
+                    $pessoa->rg = $request->rg;
+                }
+                $pessoa->save();
+                return response()->json(['message' => 'Pessoa atualizada com sucesso!'], 200);
             } else {
                 return response()->json(['message' => 'Pessoa não encontrada'], 404);
             }
@@ -234,9 +280,9 @@ class PessoaController extends Controller
     public function destroy($id)
     {
         try {
-            $pessoa = Pessoa::findOrFail($id);
-            $pessoa->delete();
+            $pessoa = Pessoa::find($id);
             if ($pessoa) {
+                $pessoa->delete();
                 return response()->json(['message' => 'Pessoa excluída com sucesso!'], 200);
             } else {
                 return response()->json(['message' => 'Pessoa não encontrada'], 404);

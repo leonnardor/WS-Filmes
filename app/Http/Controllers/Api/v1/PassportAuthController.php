@@ -53,6 +53,7 @@ class PassportAuthController extends Controller
  */
    public function cadastrar(Request $request)
     {
+       try {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -73,6 +74,9 @@ class PassportAuthController extends Controller
         $response = ['Usuario cadastrado com sucesso'.$user , 'token' => $token];
 
         return response($response, 200);
+       }catch (\Exception $e) {
+        return response()->json(['error' => 'Não foi possível realizar o cadastro.'], 400);
+       }
     }
 
 
@@ -111,31 +115,21 @@ class PassportAuthController extends Controller
  *      ),
  *  )
  */
-    // função para login do usuário com verificação de preenchimento de campos
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if($validator->fails()){
-            return response()->json($validator->errors(), 400);
-        }
-
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
-
-        if(Auth::attempt($credentials)){
-            $user = Auth::user();
-            $token = $user->createToken('Senha')->accessToken;
-            $response = ['token' => $token];
-            return response($response, 200);
-        } else {
-            $response = "Email ou senha inválidos";
-            return response($response, 401);
+       try {
+            $credentials = $request->only('email', 'password');
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('Senha')->accessToken;
+                $response = ['token' => $token];
+                return response($response, 200);
+            } else {
+                $response = "Email ou senha inválidos";
+                return response($response, 401);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocorreu um erro ao tentar realizar o login'], 500);
         }
     }
 
@@ -160,8 +154,12 @@ class PassportAuthController extends Controller
      * )
      */
     public function logout(Request $request){
-        $request->user()->token()->revoke();
-        return response(['message' => 'Deslogado com sucesso']);
+        try {
+            $request->user()->token()->revoke();
+            return response()->json(['message' => 'Logout realizado com sucesso'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocorreu um erro ao tentar realizar o logout'], 500);
+        }
     }
 
 
@@ -186,6 +184,11 @@ class PassportAuthController extends Controller
      * )
      */
     public function user(Request $request){
-        return response(['user' => $request->user()]);
+       try {
+            $user = $request->user();
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocorreu um erro ao tentar realizar a consulta'], 500);
+        }
     }
 }

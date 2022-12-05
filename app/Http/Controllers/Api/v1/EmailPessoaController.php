@@ -33,10 +33,9 @@ class EmailPessoaController extends Controller
     {
         try {
             if (emailPessoa::count() > 0) {
-              // paginate(10) - 10 itens por página
                 return [
                     'status' => 200, 
-                    'message' => 'Dados encontrados com sucesso!',
+                    'message' => 'Email retornados com sucesso!',
                     'Dados' => EmailPessoaResource::collection(emailPessoa::paginate(10)),
                 ];
               
@@ -78,23 +77,28 @@ class EmailPessoaController extends Controller
      * )
      */
    
+     
     public function store(Request $request)
     {
-        // cadastrar um novo email atrelado a pessoa pelo id da pessoa 
         try {
-            $email = new emailPessoa();
-            $email->email = $request->email;
-            $email->idPessoa = $request->idPessoa;
-            $email->save();
-            return [
-                'status' => 200,
-                'message' => 'Email cadastrado com sucesso!',
-                'Dados' => $email,
-            ];
+            if ($request->has('email') && $request->has('idPessoa')) {
+                if (emailPessoa::where('email', $request->email)->count() > 0) {
+                    return response()->json(['message' => 'Email já cadastrado'], 400);
+                } else {
+                    $emailPessoa = new emailPessoa();
+                    $emailPessoa->email = $request->email;
+                    $emailPessoa->idPessoa = $request->idPessoa;
+                    $emailPessoa->save();
+                    return response()->json(['message' => 'Email cadastrado com sucesso!'], 200);
+                }
+            } else {
+                return response()->json(['message' => 'Preencha todos os campos!'], 400);
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+       
 
     //* SWAGGER OA GET with parameters (id)
     /**
@@ -127,13 +131,13 @@ class EmailPessoaController extends Controller
      */
     public function show($id)
     {
-        // listar um email cadastrado
+      
         try {
             $email = emailPessoa::find($id);
             if ($email) {
                 return [
                     'status' => 200,
-                    'message' => 'Dados encontrados com sucesso!',
+                    'message' => 'Email encontrados com sucesso!',
                     'Dados' => $email,
                 ];
             } else {
@@ -184,21 +188,31 @@ class EmailPessoaController extends Controller
      * ),
      * )
      */
+
+     // verificar se ao menos um dos campos foi preenchido para atualizar o registro e se o email já não está cadastrado
     public function update(Request $request, $id)
     {
-        try {
-            $email = emailPessoa::find($id);
-            if ($email) {
-                $email->email = $request->email;
-                $email->idPessoa = $request->idPessoa;
-                $email->save();
-                return [
-                    'status' => 200,
-                    'message' => 'Email atualizado com sucesso!',
-                    'Dados' => $email,
-                ];
+       try {
+            if ($request->has('email') || $request->has('idPessoa')) {
+                $email = emailPessoa::find($id);
+                if ($email) {
+                    if ($request->has('email')) {
+                        if (emailPessoa::where('email', $request->email)->count() > 0) {
+                            return response()->json(['message' => 'Email já cadastrado'], 400);
+                        } else {
+                            $email->email = $request->email;
+                        }
+                    }
+                    if ($request->has('idPessoa')) {
+                        $email->idPessoa = $request->idPessoa;
+                    }
+                    $email->save();
+                    return response()->json(['message' => 'Email atualizado com sucesso!'], 200);
+                } else {
+                    return response()->json(['message' => 'Email não encontrado'], 404);
+                }
             } else {
-                return response()->json(['message' => 'Email não encontrado'], 404);
+                return response()->json(['message' => 'Preencha ao menos um campo para atualizar!'], 400);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
