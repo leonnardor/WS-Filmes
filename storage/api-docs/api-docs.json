@@ -1,0 +1,679 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Pessoas",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/v1/emailPessoas": {
+            "get": {
+                "tags": [
+                    "EmailPessoas"
+                ],
+                "summary": "Lista de emails de pessoas",
+                "description": "Retorna uma lista de emails de pessoas",
+                "operationId": "getEmailPessoasList",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Lista de emails de pessoas retornada com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível retornar a lista de emails de pessoas."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "EmailPessoas"
+                ],
+                "summary": "Cadastro de email de pessoa",
+                "description": "store",
+                "operationId": "5bbed9cc9ef132fe216dd30c8042e17f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "emailPessoa",
+                                    "idPessoa"
+                                ],
+                                "properties": {
+                                    "emailPessoa": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "leonnardo1588@gmail.com"
+                                    },
+                                    "idPessoa": {
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Email de pessoa cadastrado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível cadastrar o email de pessoa."
+                    }
+                }
+            }
+        },
+        "/api/v1/emailPessoas/{id}": {
+            "get": {
+                "tags": [
+                    "EmailPessoas"
+                ],
+                "summary": "Busca de email de pessoa pelo id",
+                "description": "Retorna um email de pessoa pelo id",
+                "operationId": "getEmailPessoaById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do email de pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Email de pessoa encontrado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível encontrar o email de pessoa."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "EmailPessoas"
+                ],
+                "summary": "Atualização de email de pessoa",
+                "description": "update",
+                "operationId": "af50f612afe7902d27df603b3bcb6948",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do email de pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "emailPessoa",
+                                    "idPessoa"
+                                ],
+                                "properties": {
+                                    "emailPessoa": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "leonnardo1588@gmail.com"
+                                    },
+                                    "idPessoa": {
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Email de pessoa atualizado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível atualizar o email de pessoa."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "EmailPessoas"
+                ],
+                "summary": "Exclusão de email de pessoa",
+                "description": "destroy",
+                "operationId": "a7bad6845e56b23a78209761848f5ab6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do email de pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Email de pessoa excluído com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível excluir o email de pessoa."
+                    }
+                }
+            }
+        },
+        "/api/v1/registrar": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Cadastro de usuário",
+                "description": "registrar",
+                "operationId": "registrar",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Leonardo"
+                                    },
+                                    "email": {
+                                        "description": "Email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Cadastro realizado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível realizar o cadastro."
+                    }
+                }
+            }
+        },
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login de usuário",
+                "description": "Login",
+                "operationId": "Login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "Email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Retorna o token de acesso."
+                    },
+                    "401": {
+                        "description": "Não autorizado. Usuário ou senha inválidos."
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout de usuário",
+                "description": "Logout",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Logout realizado com sucesso."
+                    },
+                    "401": {
+                        "description": "Não autorizado. Token de acesso inválido."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Retorna os dados do usuário logado",
+                "description": "user",
+                "operationId": "user",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Retorna os dados do usuário logado."
+                    },
+                    "401": {
+                        "description": "Não autorizado. Token de acesso inválido."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/pessoas": {
+            "get": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Lista de pessoas",
+                "description": "Retorna uma lista de pessoas",
+                "operationId": "getPessoasList",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Lista de pessoas retornada com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível retornar a lista de pessoas."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Cadastro de pessoa",
+                "description": "store",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "nomePessoa",
+                                    "dataNascimento",
+                                    "cpf",
+                                    "rg"
+                                ],
+                                "properties": {
+                                    "nomePessoa": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Leonardo"
+                                    },
+                                    "dataNascimento": {
+                                        "description": "Data de nascimento",
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "description": "CPF",
+                                        "type": "string"
+                                    },
+                                    "rg": {
+                                        "description": "RG",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Cadastro realizado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível realizar o cadastro."
+                    }
+                }
+            }
+        },
+        "/api/v1/pessoas/{id}": {
+            "get": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Mostra uma pessoa",
+                "description": "Mostra uma pessoa",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Pessoa retornada com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível retornar a pessoa."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Atualização de pessoa",
+                "description": "update",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "nomePessoa",
+                                    "dataNascimento",
+                                    "cpf",
+                                    "rg"
+                                ],
+                                "properties": {
+                                    "nomePessoa": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Leonardo"
+                                    },
+                                    "dataNascimento": {
+                                        "description": "Data de nascimento",
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "description": "CPF",
+                                        "type": "string"
+                                    },
+                                    "rg": {
+                                        "schema": "string",
+                                        "description": "RG"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Atualização realizada com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível realizar a atualização."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Exclusão de pessoa",
+                "description": "destroy",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Exclusão realizada com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível realizar a exclusão."
+                    }
+                }
+            }
+        },
+        "/api/v1/telefonePessoas": {
+            "get": {
+                "tags": [
+                    "TelefonePessoas"
+                ],
+                "summary": "Lista de telefones de pessoas",
+                "description": "Retorna uma lista de telefones de pessoas",
+                "operationId": "getTelefonePessoasList",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Lista de telefones de pessoas retornada com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível retornar a lista de telefones de pessoas."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "TelefonePessoas"
+                ],
+                "summary": "Cadastro de telefone de pessoa",
+                "description": "store",
+                "operationId": "c63d2bc2616dcf908ca356489c358ed1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "telefonePessoa": {
+                                        "type": "string",
+                                        "example": "11999999999"
+                                    },
+                                    "idPessoa": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Telefone de pessoa cadastrado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível cadastrar o telefone de pessoa."
+                    }
+                }
+            }
+        },
+        "/api/v1/telefonePessoas/{id}": {
+            "get": {
+                "tags": [
+                    "TelefonePessoas"
+                ],
+                "summary": "Exibir telefone de pessoa",
+                "description": "show",
+                "operationId": "dd92c920d2ef07ec5beb21a7a179d8a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do telefone de pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Telefone de pessoa exibido com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível exibir o telefone de pessoa."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "TelefonePessoas"
+                ],
+                "summary": "Atualizar telefone de pessoa",
+                "description": "update",
+                "operationId": "0b86265f67c0f684da476c4ee0cbf088",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do telefone de pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "telefonePessoa": {
+                                        "type": "string",
+                                        "example": "11999999999"
+                                    },
+                                    "idPessoa": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Telefone de pessoa atualizado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível atualizar o telefone de pessoa."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "TelefonePessoas"
+                ],
+                "summary": "Deletar telefone de pessoa",
+                "description": "destroy",
+                "operationId": "6f1d2c19ee32142ba9d60fc9c1b6a8e3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do telefone de pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso. Telefone de pessoa deletado com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro. Não foi possível deletar o telefone de pessoa."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "passport": {
+                "type": "apiKey",
+                "description": "Laravel passport apiKey security.",
+                "in": "header",
+                "scheme": "http",
+                "name": "bearer",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "http://localhost/oauth/authorize",
+                        "tokenUrl": "http://localhost/oauth/token",
+                        "refreshUrl": "http://localhost/token/refresh",
+                        "scopes": []
+                    }
+                }
+            }
+        }
+    }
+}
